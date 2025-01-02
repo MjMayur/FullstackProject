@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardBody,
@@ -10,7 +10,38 @@ import {
 } from "reactstrap";
 
 function Login() {
-  const handleLogin = () => {};
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    const apiUrl = `http://localhost:8000/user/login/`;
+    // Fetch API
+    let headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    fetch(apiUrl, {
+      method: "POST",
+      headers: headers,
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <Card
       style={{
@@ -33,6 +64,7 @@ function Login() {
               name="email"
               id="email"
               placeholder="Enter your email"
+              onChange={handleChange}
               required
             />
           </FormGroup>
@@ -42,6 +74,7 @@ function Login() {
               name="password"
               id="password"
               placeholder="Enter your password"
+              onChange={handleChange}
               required
             />
           </FormGroup>
