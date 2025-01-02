@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,7 +15,7 @@ func CreateUserService(c *gin.Context, user UserEntity) error {
 			"message": err.Error(),
 		})
 	}
-	fmt.Println("==================>its in service")
+
 	UserEntity := UserEntity{
 		Name:     user.Name,
 		Email:    user.Email,
@@ -31,4 +30,20 @@ func CreateUserService(c *gin.Context, user UserEntity) error {
 		return err
 	}
 	return nil
+}
+
+func LoginWithEmailPassword(c *gin.Context, loginReq LoginRequest) (*User, error) {
+	userEntity, err := GetUserData(c, loginReq.Email)
+	if err != nil {
+		return nil, err
+	}
+	err = bcrypt.CompareHashAndPassword([]byte(userEntity.Password), []byte(loginReq.Password))
+	if err != nil {
+		return nil, err
+	}
+	response := User{
+		Name:  userEntity.Name,
+		Email: userEntity.Email,
+	}
+	return &response, nil
 }

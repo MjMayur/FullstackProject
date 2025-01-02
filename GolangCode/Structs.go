@@ -18,6 +18,11 @@ type UserEntity struct {
 	Password string
 }
 
+type User struct {
+	Name  string
+	Email string
+}
+
 type SuccessResponse struct {
 	StatusCode int         `json:"code"`
 	Status     string      `json:"status"`
@@ -27,6 +32,11 @@ type SuccessResponse struct {
 
 type CreateUserRequest struct {
 	Name     string `json:"name" binding:"required"`
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
+}
+
+type LoginRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }

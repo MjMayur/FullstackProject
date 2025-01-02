@@ -51,6 +51,7 @@ func main() {
 	router := gin.Default()
 	router.Use(CORSMiddleware())
 	router.POST("/user/create/", HandleRegistration)
+	router.POST("/user/login/", HandleLogin)
 	// router.POST("/user/create/", CreateUserHandler)
 	// router.GET("/user/list/", ListUser)
 	// router.DELETE("/user/delete/:id", DeleteUser)

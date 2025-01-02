@@ -50,3 +50,28 @@ func HandleRegistration(c *gin.Context) {
 	}
 	SuccessRes(c, http.StatusOK, "Data fetched Successfully", nil)
 }
+
+func HandleLogin(c *gin.Context) {
+	var request LoginRequest
+	err := c.ShouldBindJSON(&request)
+	if err != nil {
+		log.Println("Error binding JSON:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": "Invalid JSON format",
+		})
+		return
+	}
+
+	if err := validationEmail(request.Email); err != nil {
+		log.Println("Email validation error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err.Error(),
+		})
+		return
+	}
+	userEntity, _ := LoginWithEmailPassword(c, request)
+	SuccessRes(c, http.StatusOK, "Data fetched Successfully", userEntity)
+
+}
