@@ -48,3 +48,21 @@ func GetUserData(c *gin.Context, email string) (*UserEntity, error) {
 	}
 	return &userData, nil
 }
+
+func AddRecordRepo(c *gin.Context, req AddUserEntity) (*ResponseStruct, string) {
+
+	query := "INSERT INTO records (name, email, phone, message) VALUES (?, ?, ?, ?)"
+	_, err := db.Exec(query, req.Name, req.Email, req.Phone, req.Message)
+	if err != nil {
+		return nil, "Internal Server Error"
+	}
+
+	if err != nil {
+		return nil, "Internal Server Error"
+	}
+	userData := ResponseStruct{
+		Code:    200,
+		Massage: "User Added Successfully.",
+	}
+	return &userData, ""
+}

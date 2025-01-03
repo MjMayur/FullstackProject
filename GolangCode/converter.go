@@ -9,3 +9,12 @@ func ConvertUserEntity(request CreateUserRequest) UserEntity {
 	}
 
 }
+
+func ConvertAddUserEntity(request AddUserRequest) AddUserEntity {
+	return AddUserEntity{
+		Name:    request.Name,
+		Email:   request.Email,
+		Phone:   request.Phone,
+		Message: request.Message,
+	}
+}

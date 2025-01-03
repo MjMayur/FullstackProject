@@ -52,3 +52,11 @@ func LoginWithEmailPassword(c *gin.Context, loginReq LoginRequest) (*User, strin
 	}
 	return &response, ""
 }
+
+func AddRecordService(c *gin.Context, req AddUserEntity) (*ResponseStruct, string) {
+	res, err := AddRecordRepo(c, req)
+	if err != "" {
+		return nil, "Internal Server Error"
+	}
+	return res, ""
+}

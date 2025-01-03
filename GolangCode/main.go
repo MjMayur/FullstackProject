@@ -52,7 +52,7 @@ func main() {
 	router.Use(CORSMiddleware())
 	router.POST("/user/create/", HandleRegistration)
 	router.POST("/user/login/", HandleLogin)
-	// router.POST("/user/create/", CreateUserHandler)
+	router.POST("/user/add/", CreateUserHandler)
 	// router.GET("/user/list/", ListUser)
 	// router.DELETE("/user/delete/:id", DeleteUser)
 	// router.GET("/user/get/:id", GetDetails)

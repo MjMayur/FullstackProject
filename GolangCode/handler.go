@@ -82,3 +82,32 @@ func HandleLogin(c *gin.Context) {
 	SuccessRes(c, http.StatusOK, "Data fetched Successfully", userEntity)
 
 }
+func CreateUserHandler(c *gin.Context) {
+	var request AddUserRequest
+	err = c.ShouldBindJSON(&request)
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(http.StatusBadRequest, gin.H{"FAILED": err})
+		return
+	}
+	if err := validationEmail(request.Email); err != nil {
+		log.Println("Email validation error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err.Error(),
+		})
+		return
+
+	}
+	addUser := ConvertAddUserEntity(request)
+	_, err := AddRecordService(c, addUser)
+	if err != "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
+	SuccessRes(c, http.StatusOK, "Data fetched Successfully", nil)
+
+}

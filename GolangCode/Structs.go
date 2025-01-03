@@ -11,6 +11,20 @@ type UserRequest struct {
 	Password string `json:"password"`
 }
 
+type AddUserRequest struct {
+	Name    string `json:"name" binding:"required"`
+	Email   string `json:"email" binding:"required"`
+	Phone   string `json:"phone" binding:"required"`
+	Message string `json:"message" binding:"required"`
+}
+
+type AddUserEntity struct {
+	Name    string
+	Email   string
+	Phone   string
+	Message string
+}
+
 // Define the userEntity struct
 type UserEntity struct {
 	Name     string
