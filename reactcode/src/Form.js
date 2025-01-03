@@ -100,7 +100,7 @@ function UserForm() {
   const submitForm = async () => {
     // API endpoint
     if (!isUpdate.update) {
-      const apiUrl = `http://localhost:8000/user/create/`;
+      const apiUrl = `http://localhost:8000/user/add/`;
       // Fetch API
       let headers = new Headers();
       headers.append("Content-Type", "application/json");
