@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Card,
   CardBody,
@@ -10,6 +11,7 @@ import {
 } from "reactstrap";
 
 function Login() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -36,7 +38,9 @@ function Login() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        if (res.code === 200) {
+          navigate("/form");
+        }
       })
       .catch((error) => {
         console.log(error);
