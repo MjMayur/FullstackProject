@@ -71,7 +71,14 @@ func HandleLogin(c *gin.Context) {
 		})
 		return
 	}
-	userEntity, _ := LoginWithEmailPassword(c, request)
+	userEntity, errorRes := LoginWithEmailPassword(c, request)
+	if errorRes != "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": errorRes,
+		})
+		return
+	}
 	SuccessRes(c, http.StatusOK, "Data fetched Successfully", userEntity)
 
 }

@@ -2,7 +2,6 @@ package main
 
 import (
 	"errors"
-	"fmt"
 	"regexp"
 )
 
@@ -11,7 +10,7 @@ func validationEmail(email string) error {
 
 	var emailRegex = `^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`
 	re := regexp.MustCompile(emailRegex)
-	fmt.Println("-------> Its Working in email")
+
 	if !re.MatchString(email) {
 		return errors.New("invalid email format")
 	}

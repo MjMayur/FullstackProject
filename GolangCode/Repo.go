@@ -25,7 +25,6 @@ func CreateUserRepo(c *gin.Context, user UserEntity) error {
 	if err != nil {
 		ErrorRes(c, http.StatusInternalServerError, "Internal Server Error", nil)
 	}
-
 	return nil
 }
 

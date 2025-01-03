@@ -4,6 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
+
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -32,18 +34,21 @@ func CreateUserService(c *gin.Context, user UserEntity) error {
 	return nil
 }
 
-func LoginWithEmailPassword(c *gin.Context, loginReq LoginRequest) (*User, error) {
+func LoginWithEmailPassword(c *gin.Context, loginReq LoginRequest) (*User, string) {
 	userEntity, err := GetUserData(c, loginReq.Email)
 	if err != nil {
-		return nil, err
+		return nil, ""
 	}
 	err = bcrypt.CompareHashAndPassword([]byte(userEntity.Password), []byte(loginReq.Password))
 	if err != nil {
-		return nil, err
+		return nil, "Invalid Credentials"
 	}
+
+	token := uuid.New().String()
 	response := User{
 		Name:  userEntity.Name,
 		Email: userEntity.Email,
+		Token: token,
 	}
-	return &response, nil
+	return &response, ""
 }

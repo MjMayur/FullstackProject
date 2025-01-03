@@ -21,6 +21,7 @@ type UserEntity struct {
 type User struct {
 	Name  string
 	Email string
+	Token string
 }
 
 type SuccessResponse struct {
