@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -105,6 +106,104 @@ func CreateUserHandler(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,
 			"message": err,
+		})
+		return
+	}
+	SuccessRes(c, http.StatusOK, "Data fetched Successfully", nil)
+
+}
+
+func ListUser(c *gin.Context) {
+	userList, err := UserListService(c)
+	if err != "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
+	response := []UserListRes{}
+	for _, userListRes := range userList {
+		userJson := ConvertUserEntityToUserJson(userListRes)
+		response = append(response, userJson)
+	}
+	SuccessRes(c, http.StatusOK, "Data fetched Successfully", response)
+}
+
+func DeleteUser(c *gin.Context) {
+	userIDstr := c.Param("id")
+	userID, err := strconv.Atoi(userIDstr)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
+	_, error := DeleteUserService(c, userID)
+	if error != "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": error,
+		})
+		return
+	}
+	SuccessRes(c, http.StatusOK, "User Deleted Successfully.", nil)
+}
+
+func GetDetails(c *gin.Context) {
+	userIDstr := c.Param("id")
+	userID, err := strconv.Atoi(userIDstr)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
+	userDetails, error := GetDetailsService(c, userID)
+	if error != "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": error,
+		})
+		return
+	}
+	SuccessRes(c, http.StatusOK, "User Deleted Successfully.", userDetails)
+}
+
+func UpdateUser(c *gin.Context) {
+	var request AddUserRequest
+	err = c.ShouldBindJSON(&request)
+	if err != nil {
+		log.Fatal(err)
+		c.JSON(http.StatusBadRequest, gin.H{"FAILED": err})
+		return
+	}
+	userIDstr := c.Param("id")
+	userID, err := strconv.Atoi(userIDstr)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": err,
+		})
+		return
+	}
+	if err := validationEmail(request.Email); err != nil {
+		log.Println("Email validation error:", err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":    400,
+			"message": err.Error(),
+		})
+		return
+
+	}
+	addUser := ConvertAddUserEntity(request)
+	error := UpdateUserService(c, addUser, userID)
+	if error != "" {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"code":    400,
+			"message": error,
 		})
 		return
 	}

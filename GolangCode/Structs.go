@@ -5,6 +5,11 @@ type ResponseStruct struct {
 	Massage string `json:"massage"`
 }
 
+type ResponseStructEntity struct {
+	Code    int
+	Massage string
+}
+
 type UserRequest struct {
 	Name     string `json:"name"`
 	Email    string `json:"email"`
@@ -54,4 +59,26 @@ type CreateUserRequest struct {
 type LoginRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
+}
+
+type UserListRes struct {
+	ID      int    `json:"ID"`
+	Name    string `json:"name"`
+	Email   string `json:"email"`
+	Phone   string `json:"phone"`
+	Message string `json:"message"`
+}
+type ListResModal struct {
+	Id      int    `db:"id"`
+	Name    string `db:"name"`
+	Email   string `db:"email"`
+	Phone   string `db:"phone"`
+	Message string `db:"message"`
+}
+type ListResEntity struct {
+	ID      int
+	Name    string
+	Email   string
+	Phone   string
+	Message string
 }

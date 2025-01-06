@@ -18,3 +18,22 @@ func ConvertAddUserEntity(request AddUserRequest) AddUserEntity {
 		Message: request.Message,
 	}
 }
+func ConvertUserModalToUserEntity(request ListResModal) ListResEntity {
+	return ListResEntity{
+		ID:      request.Id,
+		Name:    request.Name,
+		Email:   request.Email,
+		Phone:   request.Phone,
+		Message: request.Message,
+	}
+}
+
+func ConvertUserEntityToUserJson(entity ListResEntity) UserListRes {
+	return UserListRes{
+		ID:      entity.ID,
+		Name:    entity.Name,
+		Email:   entity.Email,
+		Phone:   entity.Phone,
+		Message: entity.Message,
+	}
+}

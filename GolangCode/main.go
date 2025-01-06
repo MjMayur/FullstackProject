@@ -14,7 +14,7 @@ func CORSMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With, token")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE,PATCH, OPTIONS")
 
 		if c.Request.Method == "OPTIONS" {
@@ -53,9 +53,9 @@ func main() {
 	router.POST("/user/create/", HandleRegistration)
 	router.POST("/user/login/", HandleLogin)
 	router.POST("/user/add/", CreateUserHandler)
-	// router.GET("/user/list/", ListUser)
-	// router.DELETE("/user/delete/:id", DeleteUser)
-	// router.GET("/user/get/:id", GetDetails)
-	// router.PATCH("/user/update/:id", UpdateUser)
+	router.GET("/user/list/", ListUser)
+	router.DELETE("/user/delete/:id", DeleteUser)
+	router.GET("/user/get/:id", GetDetails)
+	router.PATCH("/user/update/:id", UpdateUser)
 	router.Run(":8000")
 }
