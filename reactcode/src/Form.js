@@ -1,15 +1,10 @@
 import React, { useState } from "react";
-import {
-  Card,
-  CardBody,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button,
-} from "reactstrap";
+import { useNavigate } from "react-router-dom";
+import { Card, CardBody, Form, FormGroup, Input, Button } from "reactstrap";
 
 function UserForm() {
+  const token = localStorage.getItem("authToken") || "";
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -36,6 +31,12 @@ function UserForm() {
   const [records, setRecords] = useState([]);
 
   React.useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  }, []);
+
+  React.useEffect(() => {
     // Fetch API
     const apiUrl = "http://localhost:8000/user/list/";
     let headers = new Headers();
@@ -46,7 +47,8 @@ function UserForm() {
     })
       .then((res) => res.json())
       .then((res) => {
-        setRecords(res.Users);
+        console.log(res);
+        setRecords(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -66,11 +68,12 @@ function UserForm() {
       .then((res) => res.json())
       .then((res) => {
         setIsUpdate({ id: id, update: true });
+        console.log(res);
         setFormData({
-          name: res.User.name,
-          email: res.User.email,
-          phone: res.User.phone,
-          message: res.User.message,
+          name: res.data.Name,
+          email: res.data.Email,
+          phone: res.data.Phone,
+          message: res.data.Message,
         });
       })
       .catch((error) => {
@@ -101,7 +104,6 @@ function UserForm() {
     // API endpoint
     if (!isUpdate.update) {
       const apiUrl = `http://localhost:8000/user/add/`;
-      // Fetch API
       let headers = new Headers();
       headers.append("Content-Type", "application/json");
       fetch(apiUrl, {
@@ -283,12 +285,12 @@ function UserForm() {
                 </td>
                 <td style={{ padding: "10px", border: "1px solid #dddddd" }}>
                   <button
-                    onClick={() => handleEdit(record.id)}
+                    onClick={() => handleEdit(record.ID)}
                     style={{ marginRight: "10px" }}
                   >
                     Edit
                   </button>
-                  <button onClick={() => handleDelete(record.id)}>
+                  <button onClick={() => handleDelete(record.ID)}>
                     Delete
                   </button>
                 </td>

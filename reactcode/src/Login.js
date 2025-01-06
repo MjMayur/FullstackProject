@@ -39,6 +39,13 @@ function Login() {
       .then((res) => res.json())
       .then((res) => {
         if (res.code === 200) {
+          console.log(res);
+          const token = res.data.Token;
+
+          // Store the token in localStorage with a key
+          localStorage.setItem("authToken", token);
+
+          // Navigate the user to the "/form" route
           navigate("/form");
         }
       })
