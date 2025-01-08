@@ -46,13 +46,23 @@ func ConnectDatabase() {
 		return
 	}
 }
+
+type RegistryHandler struct {
+	ServiceInterface HandlerServices
+}
+
 func main() {
 	ConnectDatabase()
 	router := gin.Default()
 	router.Use(CORSMiddleware())
+
+	// Step 5: Pass the service instance to RegistryHandler
+	h := RegistryHandler{
+		ServiceInterface: ServiceImplementation{},
+	}
 	router.POST("/user/create/", HandleRegistration)
 	router.POST("/user/login/", HandleLogin)
-	router.POST("/user/add/", CreateUserHandler)
+	router.POST("/user/add/", h.CreateUserHandler)
 	router.GET("/user/list/", ListUser)
 	router.DELETE("/user/delete/:id", DeleteUser)
 	router.GET("/user/get/:id", GetDetails)

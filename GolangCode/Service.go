@@ -10,6 +10,9 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type ServiceImplementation struct {
+}
+
 func CreateUserService(c *gin.Context, user UserEntity) error {
 	p, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.MinCost)
 	if err != nil {
@@ -55,7 +58,7 @@ func LoginWithEmailPassword(c *gin.Context, loginReq LoginRequest) (*User, strin
 	return &response, ""
 }
 
-func AddRecordService(c *gin.Context, req AddUserEntity) (*ResponseStruct, string) {
+func (h ServiceImplementation) AddRecordService(c *gin.Context, req AddUserEntity) (*ResponseStruct, string) {
 	res, err := AddRecordRepo(c, req)
 	if err != "" {
 		return nil, "Internal Server Error"

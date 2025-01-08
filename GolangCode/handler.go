@@ -83,7 +83,8 @@ func HandleLogin(c *gin.Context) {
 	SuccessRes(c, http.StatusOK, "Data fetched Successfully", userEntity)
 
 }
-func CreateUserHandler(c *gin.Context) {
+
+func (h RegistryHandler) CreateUserHandler(c *gin.Context) {
 	var request AddUserRequest
 	err = c.ShouldBindJSON(&request)
 	if err != nil {
@@ -101,7 +102,7 @@ func CreateUserHandler(c *gin.Context) {
 
 	}
 	addUser := ConvertAddUserEntity(request)
-	_, err := AddRecordService(c, addUser)
+	_, err := h.ServiceInterface.AddRecordService(c, addUser)
 	if err != "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,
