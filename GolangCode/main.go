@@ -63,9 +63,9 @@ func main() {
 	router.POST("/user/create/", HandleRegistration)
 	router.POST("/user/login/", HandleLogin)
 	router.POST("/user/add/", h.CreateUserHandler)
-	router.GET("/user/list/", ListUser)
-	router.DELETE("/user/delete/:id", DeleteUser)
-	router.GET("/user/get/:id", GetDetails)
-	router.PATCH("/user/update/:id", UpdateUser)
+	router.GET("/user/list/", h.ListUser)
+	router.DELETE("/user/delete/:id", h.DeleteUser)
+	router.GET("/user/get/:id", h.GetDetails)
+	router.PATCH("/user/update/:id", h.UpdateUser)
 	router.Run(":8000")
 }

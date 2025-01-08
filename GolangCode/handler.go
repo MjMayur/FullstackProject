@@ -114,8 +114,8 @@ func (h RegistryHandler) CreateUserHandler(c *gin.Context) {
 
 }
 
-func ListUser(c *gin.Context) {
-	userList, err := UserListService(c)
+func (h RegistryHandler) ListUser(c *gin.Context) {
+	userList, err := h.ServiceInterface.UserListService(c)
 	if err != "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,
@@ -131,7 +131,7 @@ func ListUser(c *gin.Context) {
 	SuccessRes(c, http.StatusOK, "Data fetched Successfully", response)
 }
 
-func DeleteUser(c *gin.Context) {
+func (h RegistryHandler) DeleteUser(c *gin.Context) {
 	userIDstr := c.Param("id")
 	userID, err := strconv.Atoi(userIDstr)
 	if err != nil {
@@ -141,7 +141,7 @@ func DeleteUser(c *gin.Context) {
 		})
 		return
 	}
-	_, error := DeleteUserService(c, userID)
+	_, error := h.ServiceInterface.DeleteUserService(c, userID)
 	if error != "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,
@@ -152,7 +152,7 @@ func DeleteUser(c *gin.Context) {
 	SuccessRes(c, http.StatusOK, "User Deleted Successfully.", nil)
 }
 
-func GetDetails(c *gin.Context) {
+func (h RegistryHandler) GetDetails(c *gin.Context) {
 	userIDstr := c.Param("id")
 	userID, err := strconv.Atoi(userIDstr)
 	if err != nil {
@@ -162,7 +162,7 @@ func GetDetails(c *gin.Context) {
 		})
 		return
 	}
-	userDetails, error := GetDetailsService(c, userID)
+	userDetails, error := h.ServiceInterface.GetDetailsService(c, userID)
 	if error != "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,
@@ -173,7 +173,7 @@ func GetDetails(c *gin.Context) {
 	SuccessRes(c, http.StatusOK, "User Deleted Successfully.", userDetails)
 }
 
-func UpdateUser(c *gin.Context) {
+func (h RegistryHandler) UpdateUser(c *gin.Context) {
 	var request AddUserRequest
 	err = c.ShouldBindJSON(&request)
 	if err != nil {
@@ -200,7 +200,7 @@ func UpdateUser(c *gin.Context) {
 
 	}
 	addUser := ConvertAddUserEntity(request)
-	error := UpdateUserService(c, addUser, userID)
+	error := h.ServiceInterface.UpdateUserService(c, addUser, userID)
 	if error != "" {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"code":    400,

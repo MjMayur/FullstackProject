@@ -66,7 +66,7 @@ func (h ServiceImplementation) AddRecordService(c *gin.Context, req AddUserEntit
 	return res, ""
 }
 
-func UserListService(c *gin.Context) ([]ListResEntity, string) {
+func (h ServiceImplementation) UserListService(c *gin.Context) ([]ListResEntity, string) {
 	res, err := UserListRepo(c)
 	if err != "" {
 		return nil, "Internal Server Error"
@@ -74,7 +74,7 @@ func UserListService(c *gin.Context) ([]ListResEntity, string) {
 	return res, ""
 }
 
-func DeleteUserService(c *gin.Context, userID int) (*ResponseStructEntity, string) {
+func (h ServiceImplementation) DeleteUserService(c *gin.Context, userID int) (*ResponseStructEntity, string) {
 	res, err := DeleteUserRepo(c, userID)
 	if err != "" {
 		return nil, "Internal Server Error."
@@ -82,7 +82,7 @@ func DeleteUserService(c *gin.Context, userID int) (*ResponseStructEntity, strin
 	return res, ""
 }
 
-func GetDetailsService(c *gin.Context, userID int) (*ListResEntity, string) {
+func (h ServiceImplementation) GetDetailsService(c *gin.Context, userID int) (*ListResEntity, string) {
 	userDetails, err := GetUserDetailRepo(c, userID)
 	if err != "" {
 		return nil, "Internal Server Error."
@@ -90,7 +90,7 @@ func GetDetailsService(c *gin.Context, userID int) (*ListResEntity, string) {
 	return userDetails, ""
 }
 
-func UpdateUserService(c *gin.Context, req AddUserEntity, userID int) string {
+func (h ServiceImplementation) UpdateUserService(c *gin.Context, req AddUserEntity, userID int) string {
 	err := UpdateUserRepo(c, req, userID)
 	if err != "" {
 		return "Internal Server Error"
