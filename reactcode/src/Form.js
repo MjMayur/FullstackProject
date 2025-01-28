@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card, CardBody, Form, FormGroup, Input, Button } from "reactstrap";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function UserForm() {
   const token = localStorage.getItem("authToken") || "";
@@ -36,8 +38,7 @@ function UserForm() {
     }
   }, []);
 
-  React.useEffect(() => {
-    // Fetch API
+  const fetchData = () => {
     const apiUrl = "http://localhost:8000/user/list/";
     let headers = new Headers();
     headers.append("Content-Type", "application/json");
@@ -53,6 +54,11 @@ function UserForm() {
       .catch((error) => {
         console.log(error);
       });
+  };
+
+  React.useEffect(() => {
+    // Fetch API
+    fetchData();
   }, []);
 
   const handleEdit = (id) => {
@@ -79,6 +85,7 @@ function UserForm() {
       .catch((error) => {
         console.log(error);
       });
+    fetchData();
   };
 
   const handleDelete = (id) => {
@@ -93,49 +100,48 @@ function UserForm() {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log(res);
+        if (res.code === 200) {
+          toast.success("Record deleted successfully!");
+        } else {
+          toast.error("Failed to fetch data!");
+        }
       })
       .catch((error) => {
         console.log(error);
       });
+    fetchData();
   };
 
-  const submitForm = async () => {
-    // API endpoint
-    if (!isUpdate.update) {
-      const apiUrl = `http://localhost:8000/user/add/`;
-      let headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      fetch(apiUrl, {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify(formData),
+  const submitForm = () => {
+    const apiUrl = isUpdate.update
+      ? `http://localhost:8000/user/update/${isUpdate.id}`
+      : `http://localhost:8000/user/add/`;
+
+    const method = isUpdate.update ? "PATCH" : "POST";
+    fetch(apiUrl, {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        if (res.code === 200) {
+          toast.success(
+            isUpdate.update
+              ? "Record updated successfully!"
+              : "Record added successfully!"
+          );
+          setFormData({ name: "", email: "", phone: "", message: "" });
+          setIsUpdate({ id: 0, update: false });
+          fetchData();
+        } else {
+          toast.error("Something went wrong. Please try again.");
+        }
       })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    } else {
-      const apiUrl = `http://localhost:8000/user/update/${isUpdate.id}`;
-      // Fetch API
-      let headers = new Headers();
-      headers.append("Content-Type", "application/json");
-      fetch(apiUrl, {
-        method: "PATCH",
-        headers: headers,
-        body: JSON.stringify(formData),
-      })
-        .then((res) => res.json())
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+      .catch((error) => {
+        toast.error("Failed to submit the form!");
+        console.error(error);
+      });
   };
 
   return (
